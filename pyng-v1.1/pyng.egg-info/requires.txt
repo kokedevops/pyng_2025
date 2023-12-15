@@ -1,0 +1,17 @@
+flask~=2.0.2
+flask_login
+flask_sqlalchemy
+flask_wtf
+flask_migrate
+sqlalchemy~=1.4.27
+marshmallow~=3.14.0
+passlib~=1.7.4
+password_strength
+apscheduler~=3.6.3
+email_validator
+Werkzeug~=2.0.2
+WTForms~=3.0.0
+setuptools~=57.0.0
+alembic~=1.7.5
+python-telegram-bot
+telegram~=0.0.1

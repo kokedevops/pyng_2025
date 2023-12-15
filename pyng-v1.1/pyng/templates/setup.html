@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+
+    <div class="column is-8 is-offset-2">
+        <section class="hero is-info">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title is-2">
+                        PYNG Monitoreo by Python
+                    </h1>
+                    <h2 class="subtitle is-4">
+                        Configuracion Inicial
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <form method="POST" action="{{ url_for('setup.setup') }}" onsubmit="showLoader();" novalidate>
+            {{ form.hidden_tag() }}
+
+            <!-- Admin Account -->
+            <div class="box">
+                <p class="title is=3">Cuenta de Administrador</p>
+                <p class="subtitle is=5">
+                    La cuenta de administrador tendrá privilegios para agregar / administrar hosts, configurar SMTP,
+                    sondeo, etc.
+                    Los visitantes no autenticados solo podrán ver el estado del host en la página principal.
+                </p>
+                <div class="field">
+                    <div class="control">
+                        {{ form.username.label(class_="label") }}
+                        {{ form.username(class_="input is-medium") }}
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        {{ form.email.label(class_="label") }}
+                        {{ form.email(class_="input is-medium") }}
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        {{ form.password.label(class_="label") }}
+                        {{ form.password(class_="input is-medium") }}
+                    </div>
+                    <p class="help">{{ form.password.description }}</p>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        {{ form.verify_password.label(class_="label") }}
+                        {{ form.verify_password(class_="input is-medium") }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Polling -->
+            <div class="box">
+                <p class="title is=3">Configuracion de monitoreo</p>
+                <p class="subtitle is=5">
+                    El sondeo de hosts se ejecuta en un temporizador definido en el intervalo de sondeo a continuación.
+                    El trabajo de sondeo ejecuta un comando ping rápido a cada host para verificar su estado.
+                    Se mantendrá un historial de los estados de las encuestas para cada host durante el número de días
+                    que se define a continuación.
+                </p>
+                <div class="field">
+                    <div class="control">
+                        {{ form.poll_interval.label(class_="label") }}
+                        {{ form.poll_interval(class_="input is-large", id="polling-interval") }}
+                        <p class="help">La cantidad de tiempo en segundos entre los hosts de sondeo</p>
+                    </div>
+
+                </div>
+                <div class="field">
+                    <div class="control">
+                        {{ form.retention_days.label(class_="label") }}
+                        {{ form.retention_days(class_="input is-large", id="history-retention") }}
+                        <p class="help">La cantidad de días para mantener registros del historial de encuestas para cada
+                            host.</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SMTP -->
+            <div class="box">
+                <p class="title is=3">Configuracion de SMTP (opcional)</p>
+                <p class="subtitle is=5">
+                    La configuración de SMTP es opcional. Si SMTP está configurado, las alertas se enviarán al correo
+                    electrónico de la cuenta de administrador.
+                    dirección cuando los hosts tienen un cambio de estado (abajo-> arriba, arriba-> abajo). Deje los
+                    campos vacíos para dejarlos sin configurar.
+                </p>
+                <div class="field">
+                    <div class="control">
+                        {{ form.smtp_server.label(class_="label") }}
+                        {{ form.smtp_server(class_="input is-large", id="smtp-server") }}
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        {{ form.smtp_port.label(class_="label") }}
+                        {{ form.smtp_port(class_="input is-large", id="smtp-port") }}
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        {{ form.smtp_sender.label(class_="label") }}
+                        {{ form.smtp_sender(class_="input is-large", id="smtp-sender") }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="box">
+                <div class="control">
+                    {{ form.submit(class_="button is-info is-medium") }}
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
