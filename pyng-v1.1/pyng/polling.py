@@ -9,7 +9,10 @@ import time
 from datetime import date, timedelta
 from multiprocessing.pool import ThreadPool
 
-from pytz import timezone as pytz_timezone
+from pytz import timezone
+
+# Define la zona horaria global
+tz = timezone('America/Santiago')  # Cambia 'America/Santiago' por tu zona horaria si es necesario
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../')
 from pyng import app, db, scheduler, log, config
@@ -37,22 +40,35 @@ def poll_host(host, new_host=False, count=3):
 
     return ('🟢 Up 🟢' if response == 0 else '🔴 Down 🔴', time.strftime('%Y-%m-%d %T'), hostname)
 
+
 def update_poll_scheduler(poll_interval):
-    '''Updates the Poll Hosts schedula via APScheduler'''
+    '''Updates the Poll Hosts scheduler via APScheduler'''
     # Attempt to remove the current scheduler
     try:
         scheduler.remove_job('Poll Hosts')
     except Exception:
         pass
 
-    # Convert your timezone value to a pytz timezone object
-    tz = pytz_timezone('America/Santiago')
+    scheduler.add_job(
+        id='Poll Hosts',
+        func=_poll_hosts_threaded,
+        trigger='interval',
+        seconds=int(poll_interval),
+        timezone=tz,  # Usa la zona horaria definida
+        max_instances=1
+    )
 
-    scheduler.add_job(id='Poll Hosts', func=_poll_hosts_threaded, trigger='interval', seconds=int(poll_interval),
-                      timezone=tz, max_instances=1)
+
 def add_poll_history_cleanup_cron():
-    '''Adds crong job for poll history cleanup'''
-    scheduler.add_job(id='Poll History Cleanup', func=_poll_history_cleanup_task, trigger='cron', hour='0', minute='30')
+    '''Adds cron job for poll history cleanup'''
+    scheduler.add_job(
+        id='Poll History Cleanup',
+        func=_poll_history_cleanup_task,
+        trigger='cron',
+        hour='0',
+        minute='30',
+        timezone=tz  # Usa la zona horaria definida
+    )
 
 
 def get_hostname(ip_address):

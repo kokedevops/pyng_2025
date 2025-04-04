@@ -29,6 +29,8 @@ Requires-Dist: setuptools~=57.0.0
 Requires-Dist: alembic~=1.7.5
 Requires-Dist: python-telegram-bot
 Requires-Dist: telegram~=0.0.1
+Requires-Dist: requests
+Requires-Dist: pytz
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier
