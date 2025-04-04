@@ -5,7 +5,7 @@ import sys
 from multiprocessing.pool import ThreadPool
 
 import requests
-
+import pytz
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../')
 from pyng import db, scheduler, app, config
 from pyng.database import Hosts, HostAlerts
@@ -20,10 +20,12 @@ def update_host_status_alert_schedule(alert_interval):
     except Exception:
         pass
 
-    scheduler.add_job(id='Alerta de cambio de estado del host', func=_host_status_alerts_threaded, trigger='interval',
-                      seconds=int(alert_interval), max_instances=1)
-
-
+    scheduler.add_job(id='Alerta de cambio de estado del host',
+                      func=_host_status_alerts_threaded,
+                      trigger='interval',
+                      seconds=int(alert_interval),
+                      max_instances=1,
+                      timezone=pytz.utc)  # <-- add this timezone argument
 def _host_status_alerts_threaded():
     with app.app_context():
         alerts_enabled = json.loads(get_alerts_enabled())['alerts_enabled']

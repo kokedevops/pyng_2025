@@ -9,6 +9,8 @@ import time
 from datetime import date, timedelta
 from multiprocessing.pool import ThreadPool
 
+from pytz import timezone as pytz_timezone
+
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../')
 from pyng import app, db, scheduler, log, config
 from pyng.database import Hosts, PollHistory, HostAlerts
@@ -35,7 +37,6 @@ def poll_host(host, new_host=False, count=3):
 
     return ('🟢 Up 🟢' if response == 0 else '🔴 Down 🔴', time.strftime('%Y-%m-%d %T'), hostname)
 
-
 def update_poll_scheduler(poll_interval):
     '''Updates the Poll Hosts schedula via APScheduler'''
     # Attempt to remove the current scheduler
@@ -44,10 +45,11 @@ def update_poll_scheduler(poll_interval):
     except Exception:
         pass
 
+    # Convert your timezone value to a pytz timezone object
+    tz = pytz_timezone('America/Santiago')
+
     scheduler.add_job(id='Poll Hosts', func=_poll_hosts_threaded, trigger='interval', seconds=int(poll_interval),
-                      max_instances=1)
-
-
+                      timezone=tz, max_instances=1)
 def add_poll_history_cleanup_cron():
     '''Adds crong job for poll history cleanup'''
     scheduler.add_job(id='Poll History Cleanup', func=_poll_history_cleanup_task, trigger='cron', hour='0', minute='30')

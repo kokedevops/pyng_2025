@@ -1,4 +1,4 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: pyng
 Version: 0.0.1
 Summary: Sondeo de hosts a través de ICMP para verificar su estado
@@ -6,29 +6,56 @@ Home-page: https://gitlab.com/jorge.valenzuela.diaz/pyng
 Author: Jorge Valenzuela
 Author-email: jorge.valenzuela.diaz@ciisa.cl
 License: JVD
-Platform: UNKNOWN
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.4
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Requires-Dist: flask~=2.0.2
+Requires-Dist: flask_login
+Requires-Dist: flask_sqlalchemy
+Requires-Dist: flask_wtf
+Requires-Dist: flask_migrate
+Requires-Dist: sqlalchemy~=1.4.27
+Requires-Dist: marshmallow~=3.14.0
+Requires-Dist: passlib~=1.7.4
+Requires-Dist: password_strength
+Requires-Dist: apscheduler~=3.6.3
+Requires-Dist: email_validator
+Requires-Dist: Werkzeug~=2.0.2
+Requires-Dist: WTForms~=3.0.0
+Requires-Dist: setuptools~=57.0.0
+Requires-Dist: alembic~=1.7.5
+Requires-Dist: python-telegram-bot
+Requires-Dist: telegram~=0.0.1
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license
+Dynamic: license-file
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
-Supervise las direcciones IP sondeÃ¡ndolas a travÃ©s de solicitudes ICMP (ping).
+Supervise las direcciones IP sondeándolas a través de solicitudes ICMP (ping).
 
-Una aplicaciÃ³n web estÃ¡ disponible usando Flask para ver los estados de las direcciones IP y el historial de encuestas.
+Una aplicación web está disponible usando Flask para ver los estados de las direcciones IP y el historial de encuestas.
 
-El sondeo se ejecuta como un servicio como parte de la aplicaciÃ³n web.
+El sondeo se ejecuta como un servicio como parte de la aplicación web.
 
 Una base de datos SQLite se utiliza para almacenar hosts, resultados de encuestas, cuentas de usuario, etc.
 
-# ConfiguraciÃ³n
+# Configuración
 
-DeberÃ¡n realizarse las siguientes configuraciones para poder realizar la configuraciÃ³n:
+Deberán realizarse las siguientes configuraciones para poder realizar la configuración:
 
 ## 1) Instalar Python
 
-Es necesario instalar Python 3.0+, puede encontrar instaladores [aquÃ­] (https://www.python.org/downloads/)
+Es necesario instalar Python 3.0+, puede encontrar instaladores [aquí] (https://www.python.org/downloads/)
 
 ## 2) Instalar los requisitos de Python
 
@@ -38,25 +65,25 @@ Desde el directorio principal de este repositorio, ejecute el siguiente comando:
 pip install -r requirements.txt
 ''
 
-## 3) ConfiguraciÃ³n
+## 3) Configuración
 
-Siga las instrucciones a continuaciÃ³n para ejecutar el servidor web y navegue hasta el servidor una vez que se estÃ©
-ejecutando. SerÃ¡s redirigido a una pÃ¡gina de configuraciÃ³n para realizar la configuraciÃ³n inicial en la aplicaciÃ³n web /
+Siga las instrucciones a continuación para ejecutar el servidor web y navegue hasta el servidor una vez que se esté
+ejecutando. Serás redirigido a una página de configuración para realizar la configuración inicial en la aplicación web /
 base de datos.
 
-*** Nota: *** ConfigurarÃ¡ una cuenta de administrador durante la instalaciÃ³n, esta cuenta deberÃ¡ utilizarse para obtener
-todas las funciones. De forma predeterminada, los visitantes no autenticados solo podrÃ¡n ver los estados de IP
+*** Nota: *** Configurará una cuenta de administrador durante la instalación, esta cuenta deberá utilizarse para obtener
+todas las funciones. De forma predeterminada, los visitantes no autenticados solo podrán ver los estados de IP
 
 # Ejecutando servidor web
 
-Para ejecutar el servidor web de la forma mÃ¡s bÃ¡sica (perezosa), puede ejecutar lo siguiente desde el directorio
+Para ejecutar el servidor web de la forma más básica (perezosa), puede ejecutar lo siguiente desde el directorio
 principal de este repositorio:
 
 ''
 flask run
 ''
 
-Si no se proporcionan argumentos, el servidor web se ejecutarÃ¡ en *** http: //127.0.0.1: 5000 ***
+Si no se proporcionan argumentos, el servidor web se ejecutará en *** http: //127.0.0.1: 5000 ***
 
 Si desea especificar un host / puerto, puede utilizar los siguientes argumentos:
 
@@ -70,15 +97,15 @@ Para ver todos los argumentos:
 flask run --help
 ''
 
-*** Nota: *** SerÃ­a prudente trasladar esto a un servidor WSGI para uso en producciÃ³n,
-ver [aquÃ­] (https://flask.palletsprojects.com/en/1.1.x/deploying/)
+*** Nota: *** Sería prudente trasladar esto a un servidor WSGI para uso en producción,
+ver [aquí] (https://flask.palletsprojects.com/en/1.1.x/deploying/)
 
 ## 4) Migraciones de bases de datos
 
-En caso de que el esquema de la base de datos cambie, serÃ¡ necesario realizar una migraciÃ³n. Estas migraciones se pueden
+En caso de que el esquema de la base de datos cambie, será necesario realizar una migración. Estas migraciones se pueden
 encontrar en `migraciones / versiones /`
 
-Para realizar una migraciÃ³n de base de datos, detenga los servicios web y luego ejecute el siguiente comando desde el
+Para realizar una migración de base de datos, detenga los servicios web y luego ejecute el siguiente comando desde el
 directorio principal de este repositorio:
 
 ''
@@ -87,12 +114,10 @@ flask db upgrade
 
 # FUNCIONES DE LA APLICACION
 
-* Agregar administraciÃ³n de usuarios en la configuraciÃ³n
+* Agregar administración de usuarios en la configuración
     * Agregar usuario
     * Eliminar usuario
-    * Restablecer la contraseÃ±a
+    * Restablecer la contraseña
 * Permitir agregar hosts por nombre de host
-    * nslookup para encontrar la direcciÃ³n IP
-    * Falla y omite la adiciÃ³n de host si nslookup falla
-
-
+    * nslookup para encontrar la dirección IP
+    * Falla y omite la adición de host si nslookup falla
